@@ -15,19 +15,17 @@ public class Inventory : MonoBehaviour
     public Cannon cannonOne;
     public Cannon cannonTwo;
     public Cannon cannonThree;
+    public List<Cannon> cannons = new List<Cannon>();
 
     [Header("Payload selection")]
     public Button payloadOne;
     public Button payloadTwo;
     public Button payloadThree;
+    public List<Button> payloads = new List<Button>();
     public int selected;
-
-    [Header("Slap-dash Bug Fix")]
-    private bool loadFix;
 
     private void Start()
     {
-        loadFix = true;
         UpdateInventory();
     }
 
@@ -41,7 +39,7 @@ public class Inventory : MonoBehaviour
         else
         {
             inventory.SetActive(false);
-            selected = 0;
+            selected = -1;
         }
 
         UpdateInventory();
@@ -49,57 +47,18 @@ public class Inventory : MonoBehaviour
 
     public void SetPayload(int i)
     {
-        if(selected == 1)
+        if (cannons[selected].payload != null)
         {
-            if(cannonOne != null)
-            {
-                ammo.Add(cannonOne.payload);
-                cannonOne.payload = null;
-            }
-            cannonOne.payload = ammo[i];
-            ammo.Remove(ammo[i]);
+            ammo.Add(cannons[selected].payload);
+            cannons[selected].payload = null;
         }
+        cannons[selected].payload = ammo[i];
+        ammo.Remove(ammo[i]);
 
-        if(selected == 2)
-        {
-            if(cannonTwo.payload != null)
-            {
-                ammo.Add(cannonTwo.payload);
-                cannonTwo.payload = null;
-            }
-            cannonTwo.payload = ammo[i];
-            ammo.Remove(ammo[i]);
-        }
-
-        if (selected == 3)
-        {
-            if (cannonThree.payload != null)
-            {
-                ammo.Add(cannonThree.payload);
-                cannonThree.payload = null;
-            }
-            cannonThree.payload = ammo[i];
-            ammo.Remove(ammo[i]);
-        }
-
-        if(loadFix == true)
-        {
-            ammo.Remove(ammo[ammo.Count-1]);
-            loadFix = false;
-        }
-
-        /*foreach(CannonShotA a in ammo)
-        {
-            if(a == null)
-            {
-                ammo.Remove(a);
-            }
-        }*/
-
-        UpdateInventory();
+        SelectCannon(selected);
     }
 
-    private void UpdateInventory()
+    public void UpdateInventory()
     {
         buttonCount = 0;
 
@@ -118,31 +77,16 @@ public class Inventory : MonoBehaviour
             buttonCount++;
         }
 
-        if(cannonOne.payload != null)
+        for(int i = 0; i < cannons.Count; i++)
         {
-            payloadOne.GetComponentInChildren<Text>().text = cannonOne.payload.sulfur.ToString() + "," + cannonOne.payload.charcoal.ToString();
-        }
-        else
-        {
-            payloadOne.GetComponentInChildren<Text>().text = "Empty";
-        }
-
-        if (cannonTwo.payload != null)
-        {
-            payloadTwo.GetComponentInChildren<Text>().text = cannonTwo.payload.sulfur.ToString() + "," + cannonTwo.payload.charcoal.ToString();
-        }
-        else
-        {
-            payloadTwo.GetComponentInChildren<Text>().text = "Empty";
-        }
-
-        if (cannonThree.payload != null)
-        {
-            payloadThree.GetComponentInChildren<Text>().text = cannonThree.payload.sulfur.ToString() + "," + cannonThree.payload.charcoal.ToString();
-        }
-        else
-        {
-            payloadThree.GetComponentInChildren<Text>().text = "Empty";
+            if(cannons[i].payload != null)
+            {
+                payloads[i].GetComponentInChildren<Text>().text = cannons[i].payload.sulfur.ToString() + "," + cannons[i].payload.charcoal.ToString();
+            }
+            else
+            {
+                payloads[i].GetComponentInChildren<Text>().text = "Empty";
+            }
         }
     }
 }

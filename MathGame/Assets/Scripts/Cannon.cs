@@ -10,11 +10,14 @@ public class Cannon : MonoBehaviour
     public GameObject ballSpawn;
     public int direction;
 
-    public void Fire()
+    public virtual void Fire()
     {
-        GameObject g = Instantiate(cannonball, ballSpawn.transform.position, Quaternion.identity);
-        g.GetComponent<Cannonball>().power = payload.charcoal + payload.sulfur;
-        g.GetComponent<Cannonball>().direction.x = direction;
-        payload = null;
+        if (payload != null)
+        {
+            GameObject g = Instantiate(cannonball, ballSpawn.transform.position, Quaternion.identity);
+            g.GetComponent<Cannonball>().power = payload.charcoal + payload.sulfur;
+            g.GetComponent<Cannonball>().direction.x = direction;
+            payload = null;
+        }
     }
 }
