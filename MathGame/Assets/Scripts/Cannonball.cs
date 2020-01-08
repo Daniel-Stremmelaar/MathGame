@@ -18,12 +18,12 @@ public class Cannonball : MonoBehaviour
         if(collision.gameObject.tag == "AIball")
         {
             LosePower(collision.gameObject.GetComponent<Cannonball>().power, collision.gameObject);
-            print("hit ball");
         }
 
         if(collision.gameObject.tag == "Ship" || collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<ShipHealth>().Damage(power);
+            Destroy(gameObject);
         }
     }
 

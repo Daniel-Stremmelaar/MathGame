@@ -22,14 +22,23 @@ public class AILoader : MonoBehaviour
     }
     public void Load()
     {
-        cannons[0].payload = cannonOnePayloads[0];
-        cannonOnePayloads.Remove(cannonOnePayloads[0]);
+        if(cannonOnePayloads.Count > 0)
+        {
+            cannons[0].payload = cannonOnePayloads[0];
+            cannonOnePayloads.Remove(cannonOnePayloads[0]);
+        }
 
-        cannons[1].payload = cannonTwoPayloads[0];
-        cannonTwoPayloads.Remove(cannonTwoPayloads[0]);
+        if (cannonTwoPayloads.Count > 0)
+        {
+            cannons[1].payload = cannonTwoPayloads[0];
+            cannonTwoPayloads.Remove(cannonTwoPayloads[0]);
+        }
 
-        cannons[2].payload = cannonThreePayloads[0];
-        cannonThreePayloads.Remove(cannonThreePayloads[0]);
+        if (cannonThreePayloads.Count > 0)
+        {
+            cannons[2].payload = cannonThreePayloads[0];
+            cannonThreePayloads.Remove(cannonThreePayloads[0]);
+        }
     }
 
     public void ShowLoads(int i)

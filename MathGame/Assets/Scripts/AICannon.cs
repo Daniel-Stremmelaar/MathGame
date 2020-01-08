@@ -7,6 +7,5 @@ public class AICannon : Cannon
     public override void Fire()
     {
         base.Fire();
-        print("test");
     }
 }
