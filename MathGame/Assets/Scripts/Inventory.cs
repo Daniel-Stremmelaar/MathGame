@@ -7,8 +7,9 @@ public class Inventory : MonoBehaviour
 {
     [Header("Available payloads")]
     public List<CannonShotA> ammo = new List<CannonShotA>();
-    public List<Button> ammoSelect = new List<Button>();
+    public GameObject button;
     public GameObject inventory;
+    private int buttonCount;
 
     [Header("Current payloads")]
     public Cannon cannonOne;
@@ -21,8 +22,12 @@ public class Inventory : MonoBehaviour
     public Button payloadThree;
     public int selected;
 
+    [Header("Slap-dash Bug Fix")]
+    private bool loadFix;
+
     private void Start()
     {
+        loadFix = true;
         UpdateInventory();
     }
 
@@ -77,26 +82,40 @@ public class Inventory : MonoBehaviour
             ammo.Remove(ammo[i]);
         }
 
-        UpdateInventory();
-    }
+        if(loadFix == true)
+        {
+            ammo.Remove(ammo[ammo.Count-1]);
+            loadFix = false;
+        }
 
-    public void SelectPayload()
-    {
-        ammoSelect.FindIndex()
+        /*foreach(CannonShotA a in ammo)
+        {
+            if(a == null)
+            {
+                ammo.Remove(a);
+            }
+        }*/
+
+        UpdateInventory();
     }
 
     private void UpdateInventory()
     {
-        for (int i = 0; i < ammoSelect.Count; i++)
+        buttonCount = 0;
+
+        foreach(Transform child in inventory.transform)
         {
-            if(ammo[i] != null)
-            {
-                ammoSelect[i].GetComponentInChildren<Text>().text = ammo[i].sulfur.ToString() + "," + ammo[i].charcoal.ToString();
-            }
-            else
-            {
-                ammoSelect[i].gameObject.SetActive(false);
-            }
+            Destroy(child.gameObject);
+        }
+
+        foreach(CannonShotA c in ammo)
+        {
+            GameObject g = Instantiate(button);
+            g.transform.parent = inventory.transform;
+            g.GetComponentInChildren<Text>().text = c.sulfur.ToString() + "," + c.charcoal.ToString();
+            g.GetComponent<ButtonTracker>().index = buttonCount;
+            g.GetComponent<Button>().onClick.AddListener(delegate { SetPayload(g.GetComponent<ButtonTracker>().index); });
+            buttonCount++;
         }
 
         if(cannonOne.payload != null)
